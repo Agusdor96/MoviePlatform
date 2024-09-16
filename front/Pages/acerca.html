@@ -1,0 +1,61 @@
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Acerca</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
+    <link rel="stylesheet" href="../Styles/reset.css">
+    <link rel="stylesheet" href="../Styles/acerca.css">
+    <link rel="stylesheet" href="../Styles/curiosidades.css">
+
+</head>
+
+<body>
+    <header id="header">
+        <nav class="navbar navbar-expand-md bg-body-tertiary" class="navbar bg-dark border-bottom border-body"data-bs-theme="dark">
+          <div class="container-fluid mx-5 px-5 ">
+              <img src="../Assets/icon-movie.svg" alt="Logo" width="50" height="50" class="d-inline-block align-text-top">
+            <a class="navbar-brand fs-3" href="../index.html">AguMovies</a>
+      
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNavAltMarkup" aria-controls="navbarNavAltMarkup" aria-expanded="false" aria-label="Toggle navigation">
+              <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarNavAltMarkup">
+              <div class="navbar-nav ms-auto">
+                <a class="nav-link active fs-3" aria-current="page" href="../Pages/formulario.html">Tus Peliculas</a> 
+                <a class="nav-link active fs-3" aria-current="page" href="../curiosidades.html">Curiosidades</a>                  
+              </div>
+            </div>
+          </div>
+        </nav>
+    </header>
+
+        <div id="about-container"> 
+            <h1>Acerca de AguMovie</h1>
+                    <p class="acerca">AguMovie es un proyecto creado con pasión y dedicación, destinado a los amantes del cine que desean una plataforma sencilla y eficiente para gestionar su colección de películas. Este proyecto no solo se enfoca en la funcionalidad, sino también en brindar una experiencia agradable para los usuarios finales.</p>
+                <h2>Objetivos del Proyecto</h2>
+                    <p class="acerca">El principal objetivo de AguMovie es proporcionar una interfaz intuitiva para gestionar películas, permitiendo a los usuarios agregar sus películas favoritas fácilmente. La idea es combinar tecnologías modernas para ofrecer un rendimiento óptimo y una experiencia de usuario fluida.</p>
+                <h2>Tecnologías Utilizadas</h2>
+            <ul>
+                <li><strong>Backend</strong>: Utilizamos Node.js con el framework Express.js para construir una API robusta que maneja las operaciones CRUD.</li>
+                <li><strong>Base de Datos</strong>: MongoDB, junto con Mongoose como ODM, nos permite almacenar y gestionar los datos de las películas de manera eficiente.</li>
+                <li><strong>Frontend</strong>: HTML, CSS y JavaScript son la base de nuestra interfaz de usuario, con Axios para manejar las solicitudes HTTP entre el cliente y el servidor.</li>
+            </ul>
+                <h2>Problemas Abordados y Soluciones</h2>
+                <h3>Sincronización de Datos entre Frontend y Backend:</h3>
+                    <p class="acerca"><strong>Problema</strong>: Inicialmente, al agregar o eliminar películas desde el frontend, los cambios no se reflejaban automáticamente en la interfaz de usuario.<br>
+                    <strong>Solución</strong>: Implementamos llamadas asíncronas con Axios y manejamos la actualización del DOM de manera eficiente para asegurar que cualquier cambio en la base de datos se refleje inmediatamente en la interfaz de usuario.</p>
+                <h3>Manejo de Formularios y DOM</h3>
+                    <p class="acerca"><strong>Problema</strong>: Manipulaciones incorrectas del DOM causaban errores cuando ciertos elementos no estaban presentes.<br>
+                    <strong>Solución</strong>: Implementamos verificaciones para asegurar que los elementos existen antes de intentar manipularlos, y añadimos funcionalidad para resetear el formulario tras su envío.</p>
+                <h2>Reflexiones Finales</h2>
+                    <p class="acerca">AguMovie es más que un simple proyecto de gestión de películas, es una representación de la resolución de problemas y la aplicación práctica de conceptos de programación. Este viaje ha sido una oportunidad para aprender, crecer y, lo más importante, crear algo útil y divertido. Esperamos que disfruten usando AguMovie tanto como nosotros disfrutamos creándolo.</p>
+        </div>
+
+        <footer id="pieDePagina">
+            <p>&copy; 2024 by Agustin Repetto</p>
+            </footer>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous"></script>
+</body>
+</html>

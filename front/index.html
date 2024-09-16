@@ -1,0 +1,107 @@
+<!DOCTYPE html>
+<html lang="es">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
+    
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.8/dist/umd/popper.min.js" integrity="sha384-I7E8VVD/ismYTF4hNIPjVp/Zjvgyol6VFvRkX/vR+Vc4jQkC+hVqc2pM8ODewa9r" crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.min.js" integrity="sha384-0pUGZvbkm6XF6gxjEnlmuGrJXVbNuzT9qBBavbLwCsOGabYfZo0T0to5eqruptLy" crossorigin="anonymous"></script>
+    
+    
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
+    <link rel="stylesheet" href="./Styles/reset.css">
+    <link rel="stylesheet" href="./Styles/styles.css">
+    <title>AguMovies</title>
+  </head>
+  <body id="cuerpo">
+   
+<header id="header" class="barraNav">
+  <nav class="navbar navbar-expand-sm bg-body-tertiary" class="navbar bg-dark border-bottom border-body"data-bs-theme="dark">
+    <div class="container-fluid mx-5 px-5 ">
+        <img src="./Assets/icon-movie.svg" alt="Logo" width="50" height="50" class="d-inline-block align-text-top">
+      <a class="navbar-brand fs-3" href="../index.html">AguMovies</a>
+
+      <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNavAltMarkup" aria-controls="navbarNavAltMarkup" aria-expanded="false" aria-label="Toggle navigation">
+        <span class="navbar-toggler-icon"></span>
+      </button>
+      <div class="collapse navbar-collapse" id="navbarNavAltMarkup">
+        <div class="navbar-nav ms-auto">
+          <a class="nav-link active fs-3" aria-current="page" href="./Pages/formulario.html">Tus Peliculas</a> 
+          <a class="nav-link active fs-3" aria-current="page" href="./Pages/acerca.html">Acerca</a> 
+          <a class="nav-link active fs-3" aria-current="page" href="./curiosidades.html">Curiosidades</a>                  
+        </div>
+      </div>
+    </div>
+  </nav>
+</header>
+
+<main id="principal">
+  <div id="contenedor">
+   
+    <!-- Aquí irán las tarjetas de las películas -->
+  </div>
+</main>
+
+<hr>
+<section id="seccion-recomendadas">
+  <h1 class="titulo-recomendadas display-5 text-center text-decoration-underline">Peliculas Recomendadas</h1>
+
+  <div id="carouselExample" class="carousel slide">
+    <div class="carousel-inner">
+      <div class="carousel-item ">
+        <div class="row">
+
+          <div class="col-md-3 tarjeta2">
+            <img src="https://image.tmdb.org/t/p/original/eD66p4KB0S5kN6Bf2hjkr5STQ8I.jpg" alt="Portada Dune" class="portadasCarousel">
+          </div>
+          <div class="col-md-3 tarjeta2">
+            <img src="https://image.tmdb.org/t/p/original/4xsxw3dZLifYyEzYGJcsKrzQZHY.jpg" alt="Portada MulhollandDrive" class="portadasCarousel">
+          </div>
+          <div class="col-md-3 tarjeta2">
+            <img src="https://image.tmdb.org/t/p/original/1SVS0xzY3En6YOqxoizEwkO5fNh.jpg" alt="Portada Synecdoche" class="portadasCarousel">
+          </div>
+          <div class="col-md-3 tarjeta2">
+            <img src="https://image.tmdb.org/t/p/original/7GsYDweXQe79u5JKOG2N7DTWnLv.jpg" alt="Portada AmericanBeauty" class="portadasCarousel">
+          </div>
+        </div>
+      </div> 
+
+       <div class="carousel-item active">
+        <div class="row">
+          <div class="col-md-3 tarjeta2">
+            <img src="https://media.themoviedb.org/t/p/w220_and_h330_face/iQ5ztdjvteGeboxtmRdXEChJOHh.jpg" alt="Flyer Scarface" class="portadasCarousel">
+          </div>
+          <div class="col-md-3 tarjeta2">
+            <img src="https://media.themoviedb.org/t/p/w220_and_h330_face/vuza0WqY239yBXOadKlGwJsZJFE.jpg" alt="Flyer TrumanShow" class="portadasCarousel">
+          </div>
+          <div class="col-md-3 tarjeta2">
+            <img src="https://media.themoviedb.org/t/p/w220_and_h330_face/ppd84D2i9W8jXmsyInGyihiSyqz.jpg" alt="flyer 12AngryMen" class="portadasCarousel">
+          </div>
+          <div class="col-md-3 tarjeta2">
+            <img src="https://media.themoviedb.org/t/p/w220_and_h330_face/fNOH9f1aA7XRTzl1sAOx9iF553Q.jpg" alt="Flyer BackToTheFuture" class="portadasCarousel">
+            </div>
+        </div>
+      
+    </div>
+    <button class="carousel-control-prev" type="button" data-bs-target="#carouselExample" data-bs-slide="prev">
+      <span class="carousel-control-prev-icon" aria-hidden="false"></span>
+      
+    </button>
+    <button class="carousel-control-next" type="button" data-bs-target="#carouselExample" data-bs-slide="next">
+      <span class="carousel-control-next-icon" aria-hidden="false"></span>
+      
+    </button>
+  </div> 
+</section>
+
+
+  <footer id="pieDePagina">
+  <p>&copy; 2024 by Agustin Repetto</p>
+  </footer>
+
+  <script src="./public/bundle.js"></script>
+</body>
+</html>
+
+

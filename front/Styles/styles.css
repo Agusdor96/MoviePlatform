@@ -1,0 +1,231 @@
+#cuerpo {
+    font-family: Arial, Impact; 
+    line-height: 1.6; 
+    background-color: #060606; 
+    background-image: url("../Assets/Grid.jpg");
+    color: #333; 
+    display: flex;
+    flex-direction: column; 
+    align-items: center;
+    min-height: 100vh;
+  }
+  #header{
+    width:60%
+}
+
+.barraNav {
+    font-family: Impact, Haettenschweiler, 'Arial Narrow Bold', sans-serif;
+    font-size: 1em;
+    background-color: #0a0a0a; 
+    color: white;
+    
+    
+  }
+
+  .divDelHeader{
+    width: 90%;
+    color: white;
+    padding: 20px 20px; 
+    display: flex; 
+    justify-content: space-between; 
+    align-items: center; 
+  }
+  
+  .navLogo {
+    display: flex; 
+    align-items: center; 
+    margin-left: 25px;
+  }
+
+  #icono {
+    width: 50px; /* Tamaño del ícono */
+    margin-right: 10px; /* Espacio entre el ícono y el título */
+  }
+
+  #h1{
+    font-size: 1.5em;
+  }
+
+  .navBuscador{
+    display: flex;
+    width: 389.58px;
+    height: 30.8px;
+    margin-right: 25px;
+    
+  }
+
+
+  #principal{
+    margin: 5px;
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    width: 90%;
+    height: auto;
+    background-color: none;
+  }
+  
+  /* Estilos para los enlaces */
+  .barraNav ul {
+      list-style: none; /* Quitar viñetas de la lista */
+      display: flex; /* Para alinear los enlaces en línea */
+    }
+    
+    .barraNav ul li {
+        margin-left: 20px; /* Espacio entre los enlaces */
+        cursor: pointer; /* Cambiar cursor al pasar sobre los enlaces */
+    }
+
+  
+  /* Estilos para el contenido principal */
+  #contenedor {
+    margin-top: 15px;
+    display: flex;
+    flex-direction: column;
+    flex-wrap: wrap; 
+    align-items:flex-start;
+    background: linear-gradient(to left top, #f0f0f0, #3498db9f, #9c59b6);
+    width: 95%;
+    height: 100%;
+    color: rgb(11, 16, 20);
+    position: relative;
+    z-index: 1;
+    
+    
+
+    /* Aquí puedes agregar estilos para el contenedor de las tarjetas de películas */
+  }
+
+
+  .cardContainer{
+   /* background: linear-gradient(to left top, #F0F0F0, #3498DB, #9B59B6); */
+   width: 90%;
+   height: 350px;
+   color: #F0F0F0;
+   border: #0a0a0a;   
+   display: flex;
+   flex-direction: column;
+   flex-wrap: wrap-reverse;
+   align-items: center;
+   justify-content: flex-start;
+   align-content: flex-end;
+   margin-left: 20px;
+   margin-bottom : 100px;
+   margin-top: 50px;
+   position: relative;
+}
+
+.tamañoPoster{
+  width: 20%;
+  height: 100%;
+  border: 1px, solid, black;
+  border-top-right-radius: 20px;
+  border-bottom-right-radius: 20px;
+  border-bottom-left-radius: 20px;
+  margin-left: 58px;
+  
+  
+ 
+}
+
+.tamañoBack{
+   width: 90%;
+   height: 350px;
+   position: absolute;
+   z-index: -1;
+   
+
+}
+
+.elePelicula{
+  font-family:Verdana, Geneva, Tahoma, sans-serif;
+  font-style: italic;  
+  width: 25%; 
+  font-weight: 700;
+  background-image: linear-gradient(to left, #ff0000, #5b007e);
+  color: transparent;
+  background-clip: text;
+  -webkit-background-clip: text;
+}
+
+.tituloPelicula{
+  
+  text-align:center;
+  text-transform: uppercase;
+  font-size: 20px;
+  font-weight: 900;
+  font-family: 'Roboto', sans-serif;
+  width: 25%;
+  background-image: linear-gradient(to left, #f7f7f7, #f6ff00);
+  color: transparent;
+  background-clip: text;
+  -webkit-background-clip: text;
+  text-shadow: 1px 1px 1px #ffffff,
+             1px 2px 1px #957dad,
+             1px 3px 1px #ffffff,
+             1px 20px 30px rgba(16, 16, 16, 0.3),
+             1px 25px 50px rgba(16, 16, 16, 0.2);
+}
+
+/* SECCION CARUSEL */
+
+
+#seccion-redomendadas{
+  display: flex;
+}
+
+.titulo-recomendadas{
+  color: rgb(14, 14, 12);
+  font: small-caps 100%/200% serif;
+  font-size:xx-large;
+  background-color: rgba(255, 255, 255, 0.688);
+}
+
+.carousel{
+  width: 95vw;
+  height: 55vh;
+  background-color: rgba(255, 255, 255, 0.585);
+  background-color: rgba(255, 255, 255, 0.405);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+
+}
+
+.portadasCarousel{
+  width: 100%;
+  height: 100%;
+  border: 1px, solid, black;
+
+}
+  
+   .tarjeta2 {
+   display: flex;
+   justify-content: center;
+  }
+  
+  .portadasCarousel {
+    width: 60%;
+    border-top-right-radius: 20px;
+    border-bottom-right-radius: 20px;
+    border-bottom-left-radius: 20px;
+    object-fit: cover;
+  }
+  
+  .carousel-control-prev, .carousel-control-next {
+    width: 5%;
+  }
+  
+  .carousel-control-prev-icon, .carousel-control-next-icon {
+    background-color: black; 
+     border-radius: 50%;
+  } 
+
+
+  /* Estilos para el footer */
+#pieDePagina {
+  background: linear-gradient(to left top, #F0F0F0, #3498DB, #9B59B6);
+  width: 100%;
+  text-align: center;
+  margin-top: 10px;
+}
