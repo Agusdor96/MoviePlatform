@@ -13,27 +13,30 @@ const Movie = require("../models/Movie")
 module.exports = {
     getMovies : async () => {       
       try{
-            const movie = await Movie.find()            
-            return movie;
+          const movie = await Movie.find()            
+          return movie;
       }catch (err) {
-              res.status(500).json({err: "error"})};
-          },
+        console.log(err)
+      };
+    },
 
     createMovieService : async (movie) =>{
       try{
-        const newMovie = await Movie.create(movie); //el metodo create va a recibir un objeto con las propiedades que tenemos en el schema
+        const newMovie = await Movie.create(movie); 
         return newMovie;
       }catch (err) {
-              res.status(500).json({err: "error"})};
-          },
+        console.log(err);   
+      }
+    },
 
     deleteMovieService: async (title) => {
       try {
               const deletedMovie = await Movie.findOneAndDelete({ title });
               return deletedMovie;
       } catch (err) {
-              res.status(500).json({err: "error"})};
-          }
+        console.log(err)
+      };
+    }
 };
 
 
