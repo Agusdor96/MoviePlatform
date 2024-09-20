@@ -5,13 +5,11 @@ const cors = require("cors");
 
 const app = express();
 
- app.use(morgan("dev"));
- app.use(cors());
- app.use(express.json()); 
-// 2 Encausa la solicitud al enrutador.
+app.use(morgan("dev"));
+app.use(cors());
+app.use(express.json()); 
 app.use(indexRouter);
 
-// Antes de enviar al enrutador la solicitud
 
 module.exports = app;
     
