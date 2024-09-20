@@ -1,15 +1,6 @@
 const axios = require("axios")
 const Movie = require("../models/Movie")
 
-// Aca voy a tener una funcion
-//Esta se comunica con la base de datos para pedir la info de los usuarios y
-// darle el formato adecuado.
-// Funcion que me da datos
-//TODAS SON OPERACIONES ASINCRONAS
-//En el 99% estas funciones seran del tipo async. Entonces, esta funcion me retorna una promesa que al resolverse me da el valor
-//de la informacion
-//Mi controller sera async tambien 
-
 module.exports = {
     getMovies : async () => {       
       try{
