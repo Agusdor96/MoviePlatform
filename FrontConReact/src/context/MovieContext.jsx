@@ -18,7 +18,7 @@ export const MovieProvider = ({ children }) => {
     const addMovie = async (newMovie) => {
       try {
         const response = await axios.post("http://localhost:3000/movies", newMovie);
-        setMovies([...movies, response.data]);
+        setMovies((prevMovies) => [...prevMovies, response.data]);
       } catch (error) {
         console.error("Error adding movie:", error);
       }
