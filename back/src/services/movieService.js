@@ -1,34 +1,50 @@
 const axios = require("axios")
 const Movie = require("../models/Movie")
 
-module.exports = {
-    getMovies : async () => {       
-      try{
-          const movie = await Movie.find()            
-          return movie;
-      }catch (err) {
-        console.log(err)
-      };
-    },
-
-    createMovieService : async (movie) =>{
-      try{
-        const newMovie = await Movie.create(movie); 
-        return newMovie;
-      }catch (err) {
-        console.log(err);   
-      }
-    },
-
-    deleteMovieService: async (title) => {
-      try {
-              const deletedMovie = await Movie.findOneAndDelete({ title });
-              return deletedMovie;
-      } catch (err) {
-        console.log(err)
-      };
+class MovieService {
+  async getMovies() {
+    try {
+      const movies = await Movie.find();
+      return movies;
+    } catch (err) {
+      console.error(err);
+      throw err;
     }
-};
+  }
+
+  async createMovie(movie) {
+    try {
+      const newMovie = await Movie.create(movie);
+      return newMovie;
+    } catch (err) {
+      console.error(err);
+      throw err;
+    }
+  }
+
+  async saveScrapedMovies(movies) {
+    try {
+      const scrapedMovies = await Movie.insertMany(movies);
+      return scrapedMovies;
+    } catch (err) {
+      console.error(err);
+      throw err;
+    }
+  }
+
+  async deleteMovie(title) {
+    try {
+      const deletedMovie = await Movie.findOneAndDelete({ title });
+      return deletedMovie;
+    } catch (err) {
+      console.error(err);
+      throw err;
+    }
+  }
+}
+
+module.exports = MovieService;
+
 
 
 
