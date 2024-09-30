@@ -9,7 +9,8 @@ const movieSchema = new Schema({
     genre: {type: String, required: true},
     rate: {type: String, required: true},
     poster: {type: String, required: true},
-    background: {type: String, required: true}
+    background: {type: String, required: true},
+    platformLink: {type: String}
 });
 
 
