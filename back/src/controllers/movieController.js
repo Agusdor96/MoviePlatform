@@ -1,4 +1,4 @@
-const MovieService = require("../services/movieService");
+const MovieService = require("../services/movieService.js");
 const catchAsync = require("../utils/catchAsync");
 const scrapingUtils = require("../utils/scrapingUtils");
 
@@ -6,9 +6,13 @@ const movieService = new MovieService()
 
 const getAllMovies = async (req, res) => {
     const movies = await movieService.getMovies() 
-        res.status(200).json(movies)};
+    res.status(200).json(movies)
+}
 
 const getScrapMovies = async (req, res) => {
+    const existingMovies = await movieService.getMovies()
+    if(existingMovies.length > 10) res.status(409).json({ mensaje: 'Las películas ya están en la base de datos' });
+
     const movies = await scrapingUtils.scrapImdb()
     const scrapedMovies = await movieService.saveScrapedMovies(movies)
     res.json(scrapedMovies);
@@ -17,12 +21,14 @@ const getScrapMovies = async (req, res) => {
 const createMovieController = async (req, res) => {
     const {title, director, duration, rate, year, poster, genre, background} = req.body;
     const newMovie = await movieService.createMovieService({title, director, duration, rate, year, poster, genre, background});
-        res.status(201).json(newMovie)};
+    res.status(201).json(newMovie)
+}
 
 const deleteMovieService = async (req, res) => {
     const { title } = req.params; 
     const deletedMovie = await movieService.deleteMovieService(title);
-        res.status(200).json(deletedMovie)};
+    res.status(200).json(deletedMovie)
+}
         
 
 module.exports = {
