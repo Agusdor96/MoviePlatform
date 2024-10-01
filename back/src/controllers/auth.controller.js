@@ -1,12 +1,12 @@
-const UserService = require("../services/users.service");
+const AuthService = require("../services/auth.service");
 
-const userService = new UserService()
+const authService = new AuthService()
 
 class AuthController {
     async userSignUp(req, res) {
         const userData = req.body;
         try{
-            const newUser = await userService.createNewUser(userData)
+            const newUser = await authService.createNewUser(userData)
             res.status(201).json(newUser)
         }catch(err){
             res.status(409).json({error: "New user error"})
