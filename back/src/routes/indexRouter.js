@@ -1,6 +1,8 @@
 const {Router} = require ("express");
 const moviesRouter = require("./moviesRouter");
 const scrappingRouter = require("./scrappingRoutes");
+const usersRouter = require("./usersRouter");
+const authRouter = require("./authRouter");
 
 const indexRouter = Router();
 
