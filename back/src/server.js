@@ -1,17 +1,16 @@
 const express = require("express");
-const indexRouter = require("./routes/routes");
+const indexRouter = require("./routes/indexRouter");
 const morgan = require("morgan");
 const cors = require("cors");
+const { errorHandler } = require("./middlewares/errorHandler");
 
 const app = express();
 
- app.use(morgan("dev"));
- app.use(cors());
- app.use(express.json()); 
-// 2 Encausa la solicitud al enrutador.
+app.use(morgan("dev"));
+app.use(cors());
+app.use(express.json()); 
 app.use(indexRouter);
 
-// Antes de enviar al enrutador la solicitud
-
+app.use(errorHandler)
 module.exports = app;
     
