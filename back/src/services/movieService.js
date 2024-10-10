@@ -1,4 +1,3 @@
-const axios = require("axios")
 const Movie = require("../models/Movie")
 
 class MovieService {
