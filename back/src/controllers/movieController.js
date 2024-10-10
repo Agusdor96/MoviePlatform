@@ -1,21 +1,14 @@
 const MovieService = require("../services/movieService.js");
 const catchAsync = require("../utils/catchAsync");
-const scrapingUtils = require("../utils/scrapingUtils");
+const ScrapService = require("../services/scrap.service.js");
 
+
+const scrapService = new ScrapService()
 const movieService = new MovieService()
 
 const getAllMovies = async (req, res) => {
     const movies = await movieService.getMovies() 
     res.status(200).json(movies)
-}
-
-const getScrapMovies = async (req, res) => {
-    const existingMovies = await movieService.getMovies()
-    if(existingMovies.length > 10) res.status(409).json({ mensaje: 'Las películas ya están en la base de datos' });
-
-    const movies = await scrapingUtils.scrapImdb()
-    const scrapedMovies = await movieService.saveScrapedMovies(movies)
-    res.json(scrapedMovies);
 }
         
 const createMovieController = async (req, res) => {
@@ -29,11 +22,16 @@ const deleteMovieService = async (req, res) => {
     const deletedMovie = await movieService.deleteMovieService(title);
     res.status(200).json(deletedMovie)
 }
-        
+
+const insertMovieData = async (req, res) => {
+  const moviesData = await scrapService.readGoogleSheet(startRow);
+  const response = await movieService.insertMoviesIntoMongo(moviesData)
+  res.status(200).send(`${response.length} documentos fueron insertados`);
+}
 
 module.exports = {
     getAllMovies: catchAsync(getAllMovies),
     createMovieController: catchAsync(createMovieController),
     deleteMovieService: catchAsync(deleteMovieService),
-    getScrapMovies: catchAsync(getScrapMovies)
+    insertMovieData: catchAsync(insertMovieData)
 };
