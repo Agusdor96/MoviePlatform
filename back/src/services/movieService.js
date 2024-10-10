@@ -1,134 +1,71 @@
 const axios = require("axios")
 const Movie = require("../models/Movie")
 
-module.exports = {
-    getMovies : async () => {       
-      try{
-          const movie = await Movie.find()            
-          return movie;
-      }catch (err) {
-        console.log(err)
-      };
-    },
-
-    createMovieService : async (movie) =>{
-      try{
-        const newMovie = await Movie.create(movie); 
-        return newMovie;
-      }catch (err) {
-        console.log(err);   
-      }
-    },
-
-    deleteMovieService: async (title) => {
-      try {
-              const deletedMovie = await Movie.findOneAndDelete({ title });
-              return deletedMovie;
-      } catch (err) {
-        console.log(err)
-      };
+class MovieService {
+  async getMovies() {
+    try {
+      const movies = await Movie.find();
+      return movies;
+    } catch (err) {
+      console.error(err);
+      throw err;
     }
-};
+  }
 
+  async createMovie(movie) {
+    try {
+      const newMovie = await Movie.create(movie);
+      return newMovie;
+    } catch (err) {
+      console.error(err);
+      throw err;
+    }
+  }
 
+  async deleteMovie(title) {
+    try {
+      const deletedMovie = await Movie.findOneAndDelete({ title });
+      return deletedMovie;
+    } catch (err) {
+      console.error(err);
+      throw err;
+    }
+  }
 
+  async insertMoviesIntoMongo(moviesData){
+    const dataToInsert = moviesData.map(movie => ({
+      title: movie[0],
+      director: movie[1],
+      mainCharacter: movie[2],
+      year: !isNaN(movie[3]) ? Number(movie[3]) : null,
+      genre: movie[4],
+      imdbPosition: !isNaN(movie[5]) ? Number(movie[5]) : null,
+      awards: movie[6],
+      duration: movie[7],
+      rating: movie[8],
+      posterUrl: movie[9],
+      platformLink: movie[10],
+    }));
 
+    const insertedMovies = [];
+    for (const movieData of dataToInsert) {
+      try {
+        const movie = new Movie(movieData);
+        await movie.save();
+        insertedMovies.push(movieData);
+      } catch (error) {
+        if (error.code === 11000) {
+          console.warn(`La película '${movieData.title}' ya existe. Ignorando...`);
+        } else {
+          console.error('Error al guardar la película:', error);
+        }
+      }
+    }
+    return insertedMovies;
+  }
+}
 
-
-
-// async function getMovieByTitle(title){
-//     const movie = await Movie.findOne(title);
-//     return movie;
-
-// }
-
-// async function getMovieById(id){
-//     const movie = await Movie.findById(id);
-//     return movie;
-
-// }
-
-// module.exports = {getMovies, createMov}
-
-
-// async function getMovies(){
-//     try{
-//         const api = await axios.get("https://students-api.up.railway.app/movies")
-//         return api.data
-//     }
-//     catch(error){
-//     console.log("error en el servicio")
-//     }
-// }
-//  module.exports = getMovies
-
-//con objeto literal
-// module.exports = {
-//     getMovies : async () => {
-
-//        const movies = [
-//    {
-//    "title": "Guardians of the Galaxy Vol. 2",
-//    "year": 2017,
-//    "director": "James Gunn",
-//    "duration": "2h 16min",
-//    "genre": [
-//    "Action",
-//    "Adventure",
-//    "Comedy"
-//    ],
-//    "rate": 7.7,
-//    "poster": "https://m.media-amazon.com/images/M/MV5BNjM0NTc0NzItM2FlYS00YzEwLWE0YmUtNTA2ZWIzODc2OTgxXkEyXkFqcGdeQXVyNTgwNzIyNzg@._V1_SX300.jpg"
-//    },
-//    {
-//    "title": "Star Wars: Episode IV - A New Hope",
-//    "year": 1977,
-//    "director": "George Lucas",
-//    "duration": "2h 1min",
-//    "genre": [
-//    "Action",
-//    "Adventure",
-//    "Fantasy",
-//    "Sci-Fi"
-//    ],
-//    "rate": 8.7,
-//    "poster": "https://m.media-amazon.com/images/M/MV5BOTA5NjhiOTAtZWM0ZC00MWNhLThiMzEtZDFkOTk2OTU1ZDJkXkEyXkFqcGdeQXVyMTA4NDI1NTQx._V1_SX300.jpg"
-//    },
-//    {
-//    "title": "The Lord of the Rings: The Fellowship of the Ring",
-//    "year": 2001,
-//    "director": "Peter Jackson",
-//    "duration": "2h 58min",
-//    "genre": [
-//    "Action",
-//    "Adventure",
-//    "Drama",
-//    "Fantasy"
-//    ],
-//    "rate": 8.8,
-//    "poster": "https://m.media-amazon.com/images/M/MV5BN2EyZjM3NzUtNWUzMi00MTgxLWI0NTctMzY4M2VlOTdjZWRiXkEyXkFqcGdeQXVyNDUzOTQ5MjY@._V1_SX300.jpg"
-//    }
-//    ]
-// return movies;
-//          }
-// }
-
-
-
-//con otra sintaxis
-// const getMovies = async()=>{
-//     try{      
-//         const api = await axios.get("https://students-api.up.railway.app/movies");
-
-//         return api.data;
-//     } catch (err) {
-//         console.log("ERROR en la peticion GET");
-//     }
-// }
-
-// module.exports = getMovies;
-
-
+module.exports = MovieService;
 
 
 
