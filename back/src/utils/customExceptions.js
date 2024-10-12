@@ -5,7 +5,7 @@ class Exceptions {
         error.name = 'ConflictException';
         throw error;
     }    
-    static NotFound(message = 'Resource Not Found') {
+    static notFound(message = 'Resource Not Found') {
         const error = new Error(message);
         error.code = 404;
         error.name = 'NotFoundException';

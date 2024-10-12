@@ -1,5 +1,4 @@
 const AuthService = require("../services/auth.service.js");
-const tokenHelper = require("../helpers/token.helper.js")
 const authService = new AuthService();
 const cookieHelper = require("../helpers/cookie.helper.js")
 
@@ -15,18 +14,15 @@ class AuthController {
     }
 
   async userLogIn(req, res) {
-    const {email, password} = req.body
+    const {user} = res.locals
+    try{
+        const { accessToken, refreshToken } = await authService.userLogIn(user);
+        cookieHelper.setRefreshTokenCookie(res, refreshToken);
 
-    const { error, user } = await authService.userLogIn(email, password);
-    if (error) {
-        return res.status(401).json({ message: error });
+        res.json({ accessToken });
+    }catch (error){
+        res.json({ error });
     }
-
-    const { accessToken, refreshToken } = tokenHelper.generateTokens(user);
-
-    cookieHelper.setRefreshTokenCookie(res, refreshToken);
-
-    res.json({ accessToken });
   }
 
   async userLogOut(req, res) {

@@ -1,6 +1,7 @@
 const bcrypt = require('bcryptjs');
 const UserService = require("./users.service");
 const Exceptions = require('../utils/customExceptions');
+const tokenHelper = require("../helpers/token.helper.js")
 
 const userService = new UserService();
 
@@ -21,18 +22,9 @@ class AuthService {
         }
     }
 
-    async userLogIn(email, password){
-        const user = await userService.getUserByEmail({ email });
-        if (!user) {
-            return { error: 'Usuario no encontrado' };
-         }
-
-        const isPasswordValid = await bcrypt.compare(password, user.password);
-        if (!isPasswordValid) {
-            return { error: 'Contraseña incorrecta' };
-        }
-
-        return { user };
+    async userLogIn(user){
+        const tokens = tokenHelper.generateTokens(user);     
+        return tokens
     }
 }
 
