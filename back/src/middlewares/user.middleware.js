@@ -36,6 +36,4 @@ class UserMiddleware {
         }
     }
 }
-module.exports = {
-    UserMiddleware
-}
+module.exports = UserMiddleware

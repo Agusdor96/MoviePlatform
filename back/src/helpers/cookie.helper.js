@@ -7,7 +7,16 @@ const setRefreshTokenCookie = (res, refreshToken) => {
     });
   };
 
+const clearRefreshTokenCookie = (res) => {
+  res.clearCookie('refreshToken', {
+    httpOnly: true,
+    secure: process.env.NODE_ENV === 'production', // Solo en HTTPS en producción
+    sameSite: 'strict',
+  });
+}
+
 module.exports = {
-    setRefreshTokenCookie
+    setRefreshTokenCookie,
+    clearRefreshTokenCookie
 }
   

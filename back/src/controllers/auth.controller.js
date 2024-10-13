@@ -13,7 +13,7 @@ class AuthController {
         }
     }
 
-  async userLogIn(req, res) {
+    async userLogIn(req, res) {
     const {user} = res.locals
     try{
         const { accessToken, refreshToken } = await authService.userLogIn(user);
@@ -23,11 +23,16 @@ class AuthController {
     }catch (error){
         res.json({ error });
     }
-  }
+    }
 
-  async userLogOut(req, res) {
-
-  }
+    async userLogOut(req, res) {
+        try{
+            cookieHelper.clearRefreshTokenCookie(res)
+            res.status(200).json({ message: 'Logout exitoso' });
+        } catch (error){
+            res.json({ error });
+        }   
+    }
 }
 
 module.exports = AuthController;

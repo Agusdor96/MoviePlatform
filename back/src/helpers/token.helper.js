@@ -1,6 +1,8 @@
 const jwt = require('jsonwebtoken');
 const { accessTokenSecret, refreshTokenSecret, accessTokenLife, refreshTokenLife } = require('../config/jwtCon.js');
 
+
+
 const generateTokens = (user) => {
   const accessToken = jwt.sign(
                         { id: user._id, role: user.role },
@@ -19,10 +21,11 @@ const verifyToken = (token, secret) => {
   try {
     return jwt.verify(token, secret);
   } catch (error) {
-    return null;  // Token no válido o expirado
+    return null;
   }
 };
 
 module.exports = {
-    generateTokens
+    generateTokens,
+    verifyToken
 }
