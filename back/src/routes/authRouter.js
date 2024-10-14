@@ -11,6 +11,6 @@ const authMidd = new AuthMiddleware()
 
 authRouter.post("/signUp", userMidd.validateUserSignUp, authController.userSignUp)
 authRouter.post("/logIn",  userMidd.validateUserSignIn, authController.userLogIn)
-authRouter.post("/logOut", authMidd.validateUserToken, authController.userLogOut)
+authRouter.post("/logOut", authMidd.validateUserLogOut, authController.userLogOut)
 
 module.exports = authRouter;

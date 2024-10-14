@@ -1,6 +1,6 @@
 const AuthService = require("../services/auth.service.js");
 const authService = new AuthService();
-const cookieHelper = require("../helpers/cookie.helper.js")
+
 
 class AuthController {
     async userSignUp(req, res) {
@@ -14,23 +14,21 @@ class AuthController {
     }
 
     async userLogIn(req, res) {
-    const {user} = res.locals
-    try{
-        const { accessToken, refreshToken } = await authService.userLogIn(user);
-        cookieHelper.setRefreshTokenCookie(res, refreshToken);
-
-        res.json({ accessToken });
-    }catch (error){
-        res.json({ error });
-    }
+        const {user} = res.locals
+        try{
+            const { accessToken } = await authService.userLogIn(user, res);
+            res.json({ accessToken });
+        }catch (error){
+            res.json({ error });
+        }
     }
 
     async userLogOut(req, res) {
         try{
-            cookieHelper.clearRefreshTokenCookie(res)
+            await authService.userLogOut(res);
             res.status(200).json({ message: 'Logout exitoso' });
         } catch (error){
-            res.json({ error });
+            res.json({ message: "Error durante el logout", error });
         }   
     }
 }
