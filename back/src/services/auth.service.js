@@ -19,7 +19,7 @@ class AuthService {
             const { password, ...withoutPassword } = createUser.toObject();
             return withoutPassword;
         } catch (error) {
-            throw Exceptions.internalServerError("Error creating user")
+            return Exceptions.InternalServerError("Error creating user")
         }
     }
 

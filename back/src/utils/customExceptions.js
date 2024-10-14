@@ -1,19 +1,19 @@
 class Exceptions {
-    static conflict(message = 'Resource already exists') {
+    static Conflict(message = 'Resource already exists') {
         const error = new Error(message);
         error.code = 409;
         error.name = 'ConflictException';
         return error;
     }  
 
-    static notFound(message = 'Resource Not Found') {
+    static NotFound(message = 'Resource Not Found') {
         const error = new Error(message);
         error.code = 404;
         error.name = 'NotFoundException';
         return error;
     }   
 
-    static badRequest(message = 'Bad Request') {
+    static BadRequest(message = 'Bad Request') {
         const error = new Error(message);
         error.code = 400;
         error.name = 'BadRequestException';
@@ -34,7 +34,7 @@ class Exceptions {
         return error;
     }  
 
-    static internalServerError(message = 'Internal Error') {
+    static InternalServerError(message = 'Internal Error') {
         const error = new Error(message);
         error.code = 500;
         error.name = 'InternalServerError';

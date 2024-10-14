@@ -6,9 +6,9 @@ const authMidd = new AuthMiddleware()
 
 const moviesRouter = Router()
 
-moviesRouter.get("/", authMidd.validateUserToken , authMidd.validateUserRole(["admin"]), movieController.getAllMovies);
-moviesRouter.post("/addMovie", movieController.createMovieController);
-moviesRouter.delete("/:title", movieController.deleteMovieService);
-moviesRouter.get("/insertIntoMongo", movieController.insertMovieData);
+moviesRouter.get("/", movieController.getAllMovies);
+moviesRouter.post("/addMovie", authMidd.validateUserToken, authMidd.validateUserRole(["admin"]), movieController.createMovieController);
+moviesRouter.delete("/:title", authMidd.validateUserToken, authMidd.validateUserRole(["admin"]), movieController.deleteMovieService);
+moviesRouter.get("/insertIntoMongo", authMidd.validateUserToken, authMidd.validateUserRole(["admin"]), movieController.insertMovieData);
 
 module.exports = moviesRouter;

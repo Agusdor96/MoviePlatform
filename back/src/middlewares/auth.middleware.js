@@ -8,7 +8,7 @@ class AuthMiddleware {
         if(!authHeader) return next(Exceptions.Forbidden("Esta ruta esta protegida, debe colocar Authorization en el header"))
            
         const token = authHeader.split(" ")[1];
-        if(!token) return next (Exceptions.Forbidden("No se encontro el bearer token"))
+        if(!token) return next(Exceptions.Forbidden("No se encontro el bearer token"))
         
         try{
             const secret = accessTokenSecret

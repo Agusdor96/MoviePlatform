@@ -9,10 +9,10 @@ class UserMiddleware {
     async validateUserSignUp(req, res, next){
         const { email, password} = req.body
         try {
-            if(!email || !password) throw Exceptions.badRequest("Missing fields")
+            if(!email || !password) throw Exceptions.BadRequest("Missing fields")
 
             const existingEmail = await userService.getUserByEmail({email})
-            if(existingEmail) throw Exceptions.conflict("Email already Exists")
+            if(existingEmail) throw Exceptions.Conflict("Email already Exists")
 
             next()
         } catch (error) {
@@ -24,10 +24,10 @@ class UserMiddleware {
         const { email, password } = req.body
         try {
             const user = await userService.getUserByEmail({email});
-            if (!user) throw Exceptions.notFound("Invalid Credentials")
+            if (!user) throw Exceptions.NotFound("Invalid Credentials")
             
             const isPasswordValid = await bcrypt.compare(password, user.password);
-            if (!isPasswordValid) throw Exceptions.badRequest("Invalid Credentials")
+            if (!isPasswordValid) throw Exceptions.BadRequest("Invalid Credentials")
 
             res.locals.user = user
             next()
