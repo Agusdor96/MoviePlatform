@@ -15,8 +15,8 @@ class MovieController {
     }
 
     async createMovieController(req, res){
-        const {title, director, duration, rate, year, poster, genre, background} = req.body;
-        const newMovie = await movieService.createMovieService({title, director, duration, rate, year, poster, genre, background});
+        const {data} = res.locals
+        //const newMovie = await movieService.createMovieService(data);
         res.status(201).json(newMovie)
     }
 
