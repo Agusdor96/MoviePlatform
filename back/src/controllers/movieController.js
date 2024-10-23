@@ -1,7 +1,5 @@
 const MovieService = require("../services/movieService.js");
-const catchAsync = require("../utils/catchAsync");
 const ScrapService = require("../services/scrap.service.js");
-
 
 const scrapService = new ScrapService()
 const movieService = new MovieService()
@@ -14,15 +12,20 @@ class MovieController {
         res.status(200).json(movies)
     }
 
-    async createMovieController(req, res){
+    async addMovie(req, res){
         const {data} = res.locals
-        //const newMovie = await movieService.createMovieService(data);
-        res.status(201).json(newMovie)
+        try{
+            const newMovie = await movieService.createMovie(data);
+            res.status(201).json(newMovie)
+        } catch (err){
+            res.status(err.code).json({err});
+        }
+        
     }
 
     async deleteMovieService(req, res){
         const { title } = req.params; 
-        const deletedMovie = await movieService.deleteMovieService(title);
+        const deletedMovie = await movieService.deleteMovie(title);
         res.status(200).json(deletedMovie)
     }
 

@@ -19,7 +19,7 @@ moviesRouter.post("/addMovie",
     multerMidd.single("posterUrl"),
     multerErrorHandler,
     movieMidd.validateAddMovieData,
-    movieController.createMovieController);
+    movieController.addMovie);
 
 moviesRouter.delete("/:title",
     authMidd.validateUserToken,

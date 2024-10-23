@@ -9,7 +9,7 @@ const uploadFiles = (buffer, filename) => {
             if (err) {
                 reject(err);
             } else {
-                resolve(uploadPath); // Devuelve la ruta completa del archivo subido
+                resolve(uploadPath);
             }
         });
     });
@@ -17,13 +17,13 @@ const uploadFiles = (buffer, filename) => {
 
 const processImage = async (file) => {
     const posterBuffer = await sharp(file.buffer)
-        .webp({ quality: 80 }) // Ajusta la calidad según tus necesidades
+        .webp({ quality: 80 }) 
         .toBuffer();
 
     const uniqueSuffix = Date.now()
     const filename = `${file.fieldname}.${uniqueSuffix}.webp`;
     const location = await uploadFiles(posterBuffer, filename);
-    return location; // Devuelve la ruta completa del archivo subido
+    return location; 
 };
 
 

@@ -22,6 +22,7 @@ class MovieService {
   }
 
   async createMovie(movie) {
+    
     try {
       const newMovie = await Movie.create(movie);
       return newMovie;
@@ -39,6 +40,10 @@ class MovieService {
       console.error(err);
       throw err;
     }
+  }
+
+  async checkMovieExistance(title, director) {
+    return await Movie.findOne({ title, director });
   }
 
   async insertMoviesIntoMongo(moviesData){
