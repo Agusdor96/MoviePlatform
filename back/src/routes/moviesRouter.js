@@ -1,8 +1,9 @@
 const { Router } = require("express");
-const movieController = require("../controllers/movieController.js");
+const MovieController = require("../controllers/movieController.js");
 const AuthMiddleware = require("../middlewares/auth.middleware")
 
 const authMidd = new AuthMiddleware()
+const movieController = new MovieController()
 
 const moviesRouter = Router()
 

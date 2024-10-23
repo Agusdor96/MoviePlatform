@@ -1,9 +1,19 @@
 const Movie = require("../models/Movie")
 
 class MovieService {
-  async getMovies() {
+  async getMovies(page, limit) {
+    const offset = page * limit
+
     try {
-      const movies = await Movie.find();
+      const movies = await Movie.find()
+        .sort({ 
+          year: -1,
+          imdbPosition: 1,
+          rating: -1,         
+          duration: -1        
+        })
+        .skip(offset)
+        .limit(limit);
       return movies;
     } catch (err) {
       console.error(err);
