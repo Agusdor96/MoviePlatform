@@ -15,6 +15,7 @@ const movieSchema = new Schema({
     platformLink: {type: String, required: false}
 });
 movieSchema.index({ title: 1, director: 1 }, { unique: true });
+movieSchema.index({ title: 'text', director: 'text', mainCharacter: 'text' });
 
 const Movie = mongoose.model("Movie", movieSchema)
 

@@ -12,6 +12,18 @@ class MovieController {
         res.status(200).json(movies)
     }
 
+    async getFilteredMovies(req, res) {
+        const { page = 0, limit = 200, ...filters } = req.query;
+
+        try {
+            const movies = await movieService.getFilteredMovies(page, limit, filters);
+            res.status(200).json(movies);
+        } catch (err) {
+            console.error(err);
+            res.status(500).json({ message: 'Error al obtener las películas con filtros' });
+        }
+    }
+
     async addMovie(req, res){
         const {data} = res.locals
         try{

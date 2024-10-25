@@ -21,6 +21,53 @@ class MovieService {
     }
   }
 
+  async getFilteredMovies(page, limit, filters) {
+    const offset = page * limit;
+    const query = {};
+
+    if (filters.search) {
+      const exactMatch = await Movie.find({ title: new RegExp(`^${filters.search}$`, 'i') });
+      if (exactMatch.length > 0) {
+          return exactMatch;
+      } else {
+          query.title = new RegExp(search, 'i');
+      }
+    }
+
+    if (filters.director) query.director = new RegExp(filters.director, 'i');
+    if (filters.mainCharacter) query.mainCharacter = new RegExp(filters.mainCharacter, 'i');
+    if (filters.year) query.year = Number(filters.year);
+    if (filters.genre) query.genre = new RegExp(filters.genre, 'i');
+    if (filters.imdbPosition) query.imdbPosition = Number(filters.imdbPosition);
+    if (filters.duration) query.duration = Number(filters.duration);
+    if (filters.rating) query.rating = Number(filters.rating);
+
+    const sortOptions = {};
+    const allowedSortFields = ['imdbPosition', 'rating', 'duration'];
+
+    if (filters.sortBy && filters.order) {
+      const orderField = filters.sortBy.trim();
+      const orderType = filters.order === 'asc' ? 1 : -1;
+
+      if (allowedSortFields.includes(orderField)) {
+          sortOptions[orderField] = orderType;
+      }
+    } else {
+      sortOptions.year = 1
+    }
+
+    try {
+        const movies = await Movie.find(query)
+            .sort(sortOptions)
+            .skip(offset)
+            .limit(limit);
+        return movies;
+    } catch (err) {
+        console.error(err);
+        throw err;
+    }
+  }
+
   async createMovie(movie) {
     
     try {

@@ -13,6 +13,8 @@ const moviesRouter = Router()
 
 moviesRouter.get("/", movieController.getAllMovies);
 
+moviesRouter.get("/filteredMovies", movieController.getFilteredMovies)
+
 moviesRouter.post("/addMovie",
     authMidd.validateUserToken,
     authMidd.validateUserRole(["admin"]),
