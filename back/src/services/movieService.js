@@ -30,7 +30,7 @@ class MovieService {
       if (exactMatch.length > 0) {
           return exactMatch;
       } else {
-          query.title = new RegExp(search, 'i');
+          query.title = new RegExp(filters.search, 'i');
       }
     }
 
