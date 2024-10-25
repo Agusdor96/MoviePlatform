@@ -2,7 +2,7 @@ const { Router } = require("express");
 const MovieController = require("../controllers/movieController.js");
 const AuthMiddleware = require("../middlewares/auth.middleware");
 const MovieMiddleware = require("../middlewares/movie.middleware.js");
-const {multerMidd, multerErrorHandler} = require("../middlewares/multer.middleware.js");
+const {multerMidd, multerErrorHandler, multerUploadMiddleware} = require("../middlewares/multer.middleware.js");
 
 
 const authMidd = new AuthMiddleware()
@@ -23,10 +23,18 @@ moviesRouter.post("/addMovie",
     movieMidd.validateAddMovieData,
     movieController.addMovie);
 
-moviesRouter.delete("/:title",
+moviesRouter.put("/update/:id",
     authMidd.validateUserToken,
     authMidd.validateUserRole(["admin"]),
-    movieController.deleteMovieService);
+    multerUploadMiddleware("posterUrl"),
+    multerErrorHandler,
+    movieMidd.validateUpdateMovieData,
+    movieController.updateMovie);
+
+moviesRouter.delete("/delete/:id",
+    authMidd.validateUserToken,
+    authMidd.validateUserRole(["admin"]),
+    movieController.deleteMovie);
 
 moviesRouter.get("/insertIntoMongo",
     authMidd.validateUserToken,

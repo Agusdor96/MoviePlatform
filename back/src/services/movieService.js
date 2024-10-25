@@ -79,9 +79,14 @@ class MovieService {
     }
   }
 
-  async deleteMovie(title) {
+  async updateMovie(id, data){
+    const movie = await Movie.updateOne({ _id: id }, { $set: data });
+    if(movie) return movie
+  }
+
+  async deleteMovie(id) {
     try {
-      const deletedMovie = await Movie.findOneAndDelete({ title });
+      const deletedMovie = await Movie.findOneAndDelete({ _id: id });
       return deletedMovie;
     } catch (err) {
       console.error(err);
@@ -89,8 +94,8 @@ class MovieService {
     }
   }
 
-  async checkMovieExistance(title, director) {
-    return await Movie.findOne({ title, director });
+  async checkMovieExistance(data) {
+    return await Movie.findOne( data );
   }
 
   async insertMoviesIntoMongo(moviesData){

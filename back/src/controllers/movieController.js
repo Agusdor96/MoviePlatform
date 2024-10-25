@@ -35,10 +35,24 @@ class MovieController {
         
     }
 
-    async deleteMovieService(req, res){
-        const { title } = req.params; 
-        const deletedMovie = await movieService.deleteMovie(title);
-        res.status(200).json(deletedMovie)
+    async updateMovie(req, res){
+        const {data} = res.locals
+        try{
+            const response = await movieService.updateMovie(data.id, data.filteredData)
+            res.status(201).json(response)
+        } catch (err){
+            res.status(500).json({err});
+        }
+    }
+
+    async deleteMovie(req, res){
+        const { id } = req.params; 
+        try{
+            const deletedMovie = await movieService.deleteMovie(id);
+            res.status(200).json(deletedMovie)
+        }catch (err) {
+            res.status(409).json({ message: 'Error al eliminar la pelicula' });
+        }
     }
 
     async insertMovieData(req, res){
