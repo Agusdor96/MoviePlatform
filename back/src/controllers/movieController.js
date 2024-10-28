@@ -37,11 +37,12 @@ class MovieController {
 
     async updateMovie(req, res){
         const {data} = res.locals
+
         try{
-            const response = await movieService.updateMovie(data.id, data.filteredData)
+            const response = await movieService.updateMovie(data)
             res.status(201).json(response)
         } catch (err){
-            res.status(500).json({err});
+            res.status(500).json({err:"error en controlador de actualizacion de la pelicula"});
         }
     }
 

@@ -15,6 +15,25 @@ const uploadFiles = (buffer, filename) => {
     });
 };
 
+const deleteFile = (filePath) => {
+    return new Promise((resolve, reject) => {
+        fs.access(filePath, fs.constants.F_OK, (err) => {
+            if (err) {
+                // El archivo no existe, podemos resolver sin eliminar
+                resolve('Archivo no existe, no se eliminó.');
+            } else {
+                fs.unlink(filePath, (err) => {
+                    if (err) {
+                        reject(new Error('Error al eliminar el archivo: ' + err.message));
+                    } else {
+                        resolve('Archivo eliminado correctamente');
+                    }
+                });
+            }
+        });
+    });
+}
+
 const processImage = async (file) => {
     const posterBuffer = await sharp(file.buffer)
         .webp({ quality: 80 }) 
@@ -26,7 +45,6 @@ const processImage = async (file) => {
     return location; 
 };
 
-
 module.exports = {
-    uploadFiles, processImage
+    uploadFiles, processImage, deleteFile
 }

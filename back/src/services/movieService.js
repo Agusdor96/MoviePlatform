@@ -1,4 +1,6 @@
-const Movie = require("../models/Movie")
+const Movie = require("../models/Movie");
+const Exceptions = require("../utils/customExceptions");
+const { deleteFile } = require("../helpers/file.helper.js")
 
 class MovieService {
   async getMovies(page, limit) {
@@ -79,10 +81,20 @@ class MovieService {
     }
   }
 
-  async updateMovie(id, data){
-    const movie = await Movie.updateOne({ _id: id }, { $set: data });
-    if(movie) return movie
-  }
+  async updateMovie(data){
+    const {id: movieId, filteredData = {}, ...additionalData} = data
+    const updateData = { ...filteredData, ...additionalData };
+    
+    if(updateData.posterUrl){
+      const movie = await this.getMovieById({_id:movieId})
+      console.log(await deleteFile(movie.posterUrl))
+    }
+
+    const response = await Movie.updateOne({ _id: movieId }, { $set: updateData});
+    if(response.acknowledged !== true) throw new Exceptions.InternalServerError("Error en el servicio en la actualizacion de la pelicula")
+    
+    return response
+    }
 
   async deleteMovie(id) {
     try {
@@ -94,7 +106,7 @@ class MovieService {
     }
   }
 
-  async checkMovieExistance(data) {
+  async getMovieById(data) {
     return await Movie.findOne( data );
   }
 

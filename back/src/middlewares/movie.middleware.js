@@ -1,6 +1,7 @@
-const { processImage } = require("../helpers/file.helper");
+const { processImage, deleteFile } = require("../helpers/file.helper");
 const Exceptions = require("../utils/customExceptions");
 const MovieService = require("../services/movieService.js")
+const {ObjectId} = require("mongodb")
 
 const movieService = new MovieService()
 
@@ -40,9 +41,10 @@ class MovieMiddleware{
         const {...movieData} = req.body;
         const {id} = req.params
         
-        if(!movieData && !req.file) return next (Exceptions.BadRequest("No se encontro informacion para actualizar"))
+        if(!ObjectId.isValid(id)) return next(Exceptions.BadRequest("El ID proporcionado no es un objectId de mongoDB valido"))
+        if(!movieData && !req.file) return next(Exceptions.BadRequest("No se encontro informacion para actualizar"))
 
-        const checkMovie = await movieService.checkMovieExistance({ _id: id })
+        const checkMovie = await movieService.getMovieById({ _id: id })
         if (!checkMovie) {
             return next(Exceptions.Conflict("No se encontro pelicula con ese id."));
         }
@@ -57,8 +59,8 @@ class MovieMiddleware{
             const filteredData = {};
 
             validFields.forEach(field => {
-                if (movieData[field] && movieData[field].trim() !== '') { // Verifica que no sea un string vacío
-                    filteredData[field] = movieData[field].trim(); // Trim para eliminar espacios
+                if (movieData[field] && movieData[field].trim() !== '') { 
+                    filteredData[field] = movieData[field].trim(); 
                 }
             });
             res.locals.data = { id, filteredData };
@@ -76,6 +78,22 @@ class MovieMiddleware{
         }catch(err){
             return next(Exceptions.InternalServerError("Error en la validación de actualización de película"));
         }
+    }
+
+    async validateDeleteMovieData(req, res, next){
+        const {id} = req.params
+        if(!ObjectId.isValid(id)) return next(Exceptions.BadRequest("El ID proporcionado no es un objectId de mongoDB valido"))
+        
+        const checkMovie = await movieService.getMovieById({ _id: id })
+        if (!checkMovie) {
+            return next(Exceptions.Conflict("No se encontro pelicula con ese id."));
+        }
+
+        if(checkMovie.posterUrl){
+            console.log(await deleteFile(checkMovie.posterUrl))
+        }
+
+        next()       
     }
 }
 
