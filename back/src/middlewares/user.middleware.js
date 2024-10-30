@@ -40,7 +40,7 @@ class UserMiddleware {
         }
     }
 
-    async validateUserAndMovieData(req, res, next){
+    async validateUpdateWatchlist(req, res, next){
         const {userId, movieId, action} = req.body
         if(!ObjectId.isValid(userId || movieId)) return next(Exceptions.BadRequest("El ID proporcionado no es un objectId de mongoDB valido"))
 
@@ -57,6 +57,21 @@ class UserMiddleware {
             user,
             movie,
             action
+        }
+        next()
+    }
+
+    async validateWatchedMovies(req, res, next){
+        const {userId, movieId} = req.body
+        if(!ObjectId.isValid(userId || movieId)) return next(Exceptions.BadRequest("El ID proporcionado no es un objectId de mongoDB valido"))
+    
+        const user = await userService.getUserById({_id:userId});
+        const movie = await movieService.getMovieById({_id:movieId});
+        if (!user || !movie) throw Exceptions.NotFound("no se encuentra user o movie con el idProporcionado")
+
+        res.locals.data = {
+            user,
+            movie,
         }
         next()
     }

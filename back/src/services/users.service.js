@@ -18,11 +18,29 @@ class UserService {
         return wPassword
     }
 
-    async addMovieToWatchlist({user, movie, action}){
+    async updateWatchlist({user, movie, action}){
         if(action === "ADD"){
             user.watchlist.push(movie._id);
-            await user.save();
+            const response = await user.save();
+            if(!response) throw Exceptions.Conflict("Error al agregar pelicula a la watchlist")
+            return {message: "Pelicula agregada a la watchlist"}
         }
+        if(action === "REMOVE"){
+            user.watchlist.pull(movie._id);
+            const response = await user.save();
+            if(!response) throw Exceptions.Conflict("Error al eliminar pelicula de la watchlist")
+            return {message: "Pelicula eliminada de la watchlist"}
+        }
+    }
+
+    async updateWatchedMovies({user, movie}){
+        user.watchlist.pull(movie._id);
+        user.watched.push(movie._id);
+        const response = await user.save();
+
+        if(!response) throw Exceptions.Conflict("Error al agregar pelicula a la watched")
+            
+        return {message: "Pelicula agregada a la watched"}
     }
 
     async createUser(user){

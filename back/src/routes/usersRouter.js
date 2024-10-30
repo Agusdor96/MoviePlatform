@@ -11,8 +11,12 @@ const userMid = new UserMiddleware()
 usersRouter.get("/:id", userController.getUserById)
 
 usersRouter.post("/watchlist",
-    userMid.validateUserAndMovieData,
-    userController.addToWatchlist)
+    userMid.validateUpdateWatchlist,
+    userController.updateWatchlist)
+
+usersRouter.post("/watchedMovies",
+    userMid.validateWatchedMovies,
+    userController.updateWatchedMovies)
 // usersRouter.put("/update/:id", userController.updateUserInfo)
 // usersRouter.delete("/delete/:id", usersController.deleteOneUser)
 
