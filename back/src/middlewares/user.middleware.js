@@ -1,8 +1,12 @@
+const {ObjectId} = require("mongodb")
+const bcrypt = require('bcryptjs')
 const UserService = require("../services/users.service")
 const Exceptions = require("../utils/customExceptions")
-const bcrypt = require('bcryptjs')
+const MovieService = require("../services/movieService")
 
 const userService = new UserService()
+const movieService = new MovieService()
+
 
 class UserMiddleware {
 
@@ -34,6 +38,27 @@ class UserMiddleware {
         } catch (error) {
             next(error)
         }
+    }
+
+    async validateUserAndMovieData(req, res, next){
+        const {userId, movieId, action} = req.body
+        if(!ObjectId.isValid(userId || movieId)) return next(Exceptions.BadRequest("El ID proporcionado no es un objectId de mongoDB valido"))
+
+        if(action !== "ADD" && action !== "REMOVE") return next(Exceptions.BadRequest("El parametro action *debe* ser ADD o REMOVE"))
+        
+        const user = await userService.getUserById({_id:userId});
+        const movie = await movieService.getMovieById({_id:movieId});
+        if (!user || !movie) throw Exceptions.NotFound("no se encuentra user o movie con el idProporcionado")
+
+        if (user.watchlist.includes(movieId)) {
+            return next(Exceptions.Conflict("La película ya está en la lista de 'Quiero ver'"));
+        }
+        res.locals.data = {
+            user,
+            movie,
+            action
+        }
+        next()
     }
 }
 module.exports = UserMiddleware
