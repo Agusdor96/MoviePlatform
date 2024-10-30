@@ -7,6 +7,7 @@ const scrappingRouter = Router()
 scrappingRouter.get("/movies", scrapController.getScrapMovies);
 scrappingRouter.get("/getPoster", scrapController.getPosters);
 scrappingRouter.get("/updateUrls", scrapController.updatePosterUrls);
+scrappingRouter.get("/getLinkUrl", scrapController.getMovieUrls)
 
 
 module.exports = scrappingRouter;

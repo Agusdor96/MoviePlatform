@@ -41,7 +41,7 @@ class ScrapService{
         } finally {
           await browser.close();
         }
-      }
+    }
 
     async saveScrapedMovies(movies) {
         try {
@@ -176,6 +176,46 @@ class ScrapService{
           }
         }
     }
+
+    //////////////////////////// scrapping obtener urls de reproduccion ////////////////////////////////////////////
+    async scrapeMovies() {
+      const movies = await Movie.find({ platformLink: { $exists: false } }); // Solo películas sin enlace
+      
+      const browser = await puppeteer.launch({ headless: false });
+      const page = await browser.newPage();
+      await page.setUserAgent('Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/58.0.3029.110 Safari/537.3');
+
+      for (const movie of movies) {
+        try {
+          // Ir a cineb.rs y buscar la película
+          const formattedTitle = movie.title.toLowerCase().replace(/\s+/g, '-');
+          const searchUrl = `https://cineb.rs/search/${formattedTitle}`;
+
+          await page.goto(searchUrl, { waitUntil: 'networkidle2' });
+
+          // Esperar y seleccionar el primer resultado de la búsqueda
+          await page.waitForSelector('.film_list-wrap'); // Selector de los resultados en cineb.rs
+          const platformLink = await page.evaluate(() => {
+            const result = document.querySelector('.film-poster a');
+            return result ? result.href : null;
+          });
+
+          if (platformLink) {
+            // Actualizar el enlace en la base de datos
+            await Movie.updateOne({ _id: movie._id }, { platformLink });
+            console.log(`Enlace de ${movie.title} guardado: ${platformLink}`);
+          } else {
+            console.log(`No se encontró enlace para ${movie.title}`);
+          }
+
+        } catch (error) {
+          console.error(`Error al procesar ${movie.title}:`, error);
+        }
+      }
+
+      await browser.close();
+    }
+
 }
 
 module.exports = ScrapService

@@ -24,6 +24,19 @@ class MovieController {
         }
     }
 
+    async getMovieById(req, res){
+        const {movieId}  = req.params
+        try{
+        const movie = await movieService.getMovieById({ _id: movieId })
+            if(!movie || !movie.platformLink){
+                res.status(404).json({ message: "Error al obtener link de cineb.rs"}) 
+            }
+            res.redirect(movie.platformLink);
+        } catch(err){
+            next(err);
+        }
+    }
+
     async addMovie(req, res){
         const {data} = res.locals
         try{

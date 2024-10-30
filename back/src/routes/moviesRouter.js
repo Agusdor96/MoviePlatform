@@ -15,6 +15,8 @@ moviesRouter.get("/", movieController.getAllMovies);
 
 moviesRouter.get("/filteredMovies", movieController.getFilteredMovies)
 
+moviesRouter.get("/:movieId", movieController.getMovieById)
+
 moviesRouter.post("/addMovie",
     authMidd.validateUserToken,
     authMidd.validateUserRole(["admin"]),

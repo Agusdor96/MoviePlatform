@@ -28,6 +28,15 @@ class ScrapController {
         const result = await scrapService.processPosterUrls()
         res.json(result)
     }
+
+    async getMovieUrls(req, res){
+        try {
+            await scrapService.scrapeMovies();
+            res.send('Scraping completado');
+        } catch (error) {
+            res.status(500).send('Error durante el scraping');
+        }
+    }
 }
 
 module.exports = ScrapController;
