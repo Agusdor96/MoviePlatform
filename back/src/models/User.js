@@ -16,15 +16,7 @@ const userSchema = new Schema({
         type:String,
         enum: Object.values(ROLES),
         default:ROLES.USER
-    },
-    watchlist: [{
-        movie: { type: Schema.Types.ObjectId, ref: "Movie" },
-        addedAt: { type: Date, default: Date.now }
-    }],
-    watched: [{
-        movie: {type: Schema.Types.ObjectId, ref: "Movie"},
-        watchedAt: {type: Date, default: Date.now}
-    }]
+    }
 })
 
 const User = mongoose.model("User", userSchema)

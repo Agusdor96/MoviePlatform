@@ -27,7 +27,8 @@ class AuthService {
         const {accessToken, refreshToken} = tokenHelper.generateTokens(user); 
         cookieHelper.setRefreshTokenCookie(res, refreshToken);
 
-        return {accessToken}
+        const { password, ...wPassword } = user.toObject();
+        return {accessToken, wPassword}
     }
 
     async userLogOut(res){       

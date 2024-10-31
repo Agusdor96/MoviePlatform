@@ -3,7 +3,8 @@ const bcrypt = require('bcryptjs')
 const UserService = require("../services/users.service")
 const Exceptions = require("../utils/customExceptions")
 const MovieService = require("../services/movieService")
-const mongoose = require('mongoose');
+const Watchlist = require("../models/Watchlist")
+const Watched = require("../models/Watched")
 
 const userService = new UserService()
 const movieService = new MovieService()
@@ -51,14 +52,16 @@ class UserMiddleware {
         const movie = await movieService.getMovieById({_id:movieId});
         if (!user || !movie) return next(Exceptions.NotFound("no se encuentra user o movie con el idProporcionado"))
 
-        if(action === "ADD"){
-            if (user.watchlist.some(id => id.movie.toString() === movieId.toString())) {
+        if (action === "ADD") {
+            const movieInWatchlist = await Watchlist.findOne({ userId, movieId });
+            if (movieInWatchlist) {
                 return next(Exceptions.Conflict("La película ya está en la lista de 'Quiero ver'"));
             }
         }
         if(action === "REMOVE"){
-            if (user.watchlist.every(id => id.movie.toString() !== movieId.toString())) {
-                return next(Exceptions.Conflict("La película no esta en la lista de 'Quiero ver'"));
+            const movieInWatchlist = await Watchlist.findOne({ userId, movieId });
+            if (!movieInWatchlist) {
+                return next(Exceptions.Conflict("La película no está en la lista de 'Quiero ver'"));
             }
         }
         
@@ -67,14 +70,15 @@ class UserMiddleware {
 
     async validateWatchedMovies(req, res, next){
         const {userId, movieId} = req.body
-        if(!ObjectId.isValid(userId || movieId)) return next(Exceptions.BadRequest("El ID proporcionado no es un objectId de mongoDB valido"))
+        if(!ObjectId.isValid(userId) || !ObjectId.isValid(movieId)) return next(Exceptions.BadRequest("El ID proporcionado no es un objectId de mongoDB valido"))
     
         const user = await userService.getUserById({_id:userId});
         const movie = await movieService.getMovieById({_id:movieId});
         if (!user || !movie) return next(Exceptions.NotFound("no se encuentra user o movie con el id Proporcionado"))
 
-        if (user.watched.some(id => id.movie.toString() === movieId.toString())) {
-            return next(Exceptions.Conflict("La película ya está en la lista de 'Vistas'"));
+        const movieWatched = await Watched.findOne({ userId, movieId });
+        if (movieWatched) {
+            return next(Exceptions.Conflict("La película ya está en la lista de las peliculas vistas"));
         }
 
         next()
@@ -85,10 +89,24 @@ class UserMiddleware {
         if(!ObjectId.isValid(userId)) return next(Exceptions.BadRequest("El ID proporcionado no es un objectId de mongoDB valido"))
         
         const user = await userService.getUserById({_id:userId});
-
         if(!user) return next(Exceptions.NotFound("no se encuentra user con el idProporcionado"))
-        if(!user.watched && user.watchlist) return next(Exceptions.NotFound("el usuario no tiene peliculas asociadas"))      
-        
+
+        const isWatchlistEndpoint = req.path.includes("watchlist");
+        const isWatchedEndpoint = req.path.includes("watched");
+
+        if(isWatchlistEndpoint){
+            const hasWatchlistMovies = await Watchlist.exists({ userId });
+            if (!hasWatchlistMovies) {
+                return next(Exceptions.NotFound("El usuario no ha agregado peliculas a la lista"));
+            }
+        }
+
+        if(isWatchedEndpoint){
+            const hasWatchedMovies = await Watched.exists({ userId });
+            if (!hasWatchedMovies) {
+                return next(Exceptions.NotFound("El usuario no vio ninguna pelicula"));
+            }
+        }
         next()
     }
 }

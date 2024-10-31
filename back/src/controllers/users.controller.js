@@ -22,10 +22,22 @@ class UserController{
         }
     }
 
-    async getUserMoviesLists(req, res, next){
+    async getUserWatchlist(req, res, next){
         const {userId} = req.params
+        const {page = 0, limit = 15} = req.query
         try{
-            const movies = await userService.getMoviesLists(userId)
+            const movies = await userService.getWatchlist(userId, page, limit)
+            res.status(200).json({movies})
+        }catch (error){
+            next(error)
+        }
+    }
+
+    async getUserWatchedMovies(req, res, next){
+        const {userId} = req.params
+        const {page = 0, limit = 15} = req.query
+        try{
+            const movies = await userService.getWatchedMovies(userId, page, limit)
             res.status(200).json({movies})
         }catch (error){
             next(error)

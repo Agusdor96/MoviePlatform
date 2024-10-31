@@ -1,4 +1,6 @@
 const User = require("../models/User");
+const Watched = require("../models/Watched");
+const Watchlist = require("../models/Watchlist");
 const Exceptions = require("../utils/customExceptions");
 const {ObjectId} = require("mongodb")
 
@@ -25,43 +27,72 @@ class UserService {
         return wPassword
     }
 
-    async getMoviesLists(userId){
-        const user = await User.findById(userId)
-        .populate('watchlist.movie')
-        .populate('watched.movie') 
+    async getWatchlist(userId, page, limit){
+        const offset = page * limit
 
-        const sortedWatchlist = user.watchlist.sort((a, b) => b.addedAt - a.addedAt);
-        const sortedWatched = user.watched.sort((a, b) => b.watchedAt - a.watchedAt);
+        const watchlist = await Watchlist.find({ userId })
+            .populate('movieId')
+            .skip(offset)
+            .limit(limit);
 
+        if(watchlist.length === 0 ) throw Exceptions.NotFound("Se supero la cantidad de peliculas de la lista del usuario")
+
+        const total = await Watchlist.countDocuments({ userId });
         return {
-            watchlist: sortedWatchlist ?? [],
-            watched: sortedWatched ?? []
-        }
+            total,
+            page,
+            limit,
+            movies: watchlist
+        };
+    }
+
+    async getWatchedMovies(userId, page, limit){
+        const offset = page * limit
+
+        const watched = await Watched.find({ userId })
+            .populate('movieId')
+            .skip(offset)
+            .limit(limit);
+
+        if(watched.length === 0 ) throw Exceptions.NotFound("Se supero la cantidad de peliculas de la lista del usuario")
+
+        const total = await Watched.countDocuments({ userId });
+        return {
+            total,
+            page,
+            limit,
+            movies: watched
+        };
     }
 
     async updateWatchlist({userId, movieId, action}){
-        const user = await User.findById(userId)
-
         if(action === "ADD"){
-            user.watchlist.push({ movie: movieId, addedAt: Date.now() });
-            const response = await user.save();
+            const newWatchlistEntry = new Watchlist({
+                userId,
+                movieId,
+                addedAt: Date.now()
+            });
+            const response = await newWatchlistEntry.save();
+    
             if(!response) throw Exceptions.Conflict("Error al agregar pelicula a la watchlist")
             return {message: "Pelicula agregada a la watchlist"}
         }
         if(action === "REMOVE"){
-            user.watchlist.pull(movieId);
-            const response = await user.save();
+            const response = await Watchlist.findOneAndDelete({ userId, movieId });
+
             if(!response) throw Exceptions.Conflict("Error al eliminar pelicula de la watchlist")
             return {message: "Pelicula eliminada de la watchlist"}
         }
     }
 
     async updateWatchedMovies({userId, movieId}){
-        const user = await User.findById(userId)
-
-        user.watchlist.pull(movieId);
-        user.watched.push({ movie: movieId, watchedAt: new Date() });
-        const response = await user.save();
+        await Watched.findOneAndDelete({ userId, movieId });
+        const newWatchedEntry = new Watched({
+            userId,
+            movieId,
+            addedAt: Date.now()
+        });
+        const response = await newWatchedEntry.save();
 
         if(!response) throw Exceptions.Conflict("Error al agregar pelicula a la watched")
         return {message: "Pelicula agregada a la watched"}
