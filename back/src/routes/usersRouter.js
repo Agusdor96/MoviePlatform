@@ -1,10 +1,12 @@
 const { Router } = require("express");
 const UserController = require("../controllers/users.controller")
 const UserMiddleware = require("../middlewares/user.middleware")
+const AuthMiddleware = require("../middlewares/auth.middleware")
 
 const usersRouter = Router()
 const userController = new UserController()
 const userMid = new UserMiddleware()
+const authMidd = new AuthMiddleware()
 
 
 // usersRouter.get("/", userController.getAllUsers)
@@ -35,7 +37,7 @@ usersRouter.post("/watchedMovies",
     authMidd.validateUserRole(["user"]),
     userMid.validateWatchedMovies,
     userController.updateWatchedMovies)
-    
+
 // usersRouter.put("/update/:id", userController.updateUserInfo)
 // usersRouter.delete("/delete/:id", usersController.deleteOneUser)
 
