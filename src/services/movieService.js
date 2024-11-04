@@ -7,16 +7,20 @@ class MovieService {
     const offset = page * limit
 
     try {
+      const totalMovies = await Movie.countDocuments();
+
       const movies = await Movie.find()
         .sort({ 
           year: -1,
           imdbPosition: 1,
           rating: -1,         
           duration: -1        
-        })
-        .skip(offset)
-        .limit(limit);
-      return movies;
+        }).skip(offset).limit(limit);
+
+      return {
+        movies,
+        totalMovies
+      }
     } catch (err) {
       console.error(err);
       throw err;

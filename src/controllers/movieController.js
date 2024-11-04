@@ -6,9 +6,9 @@ const movieService = new MovieService()
 
 class MovieController {
     async getAllMovies(req, res){
-        const {page = 0, limit = 10} = req.query 
+        const {page = 1, limit = 10} = req.query 
 
-        const movies = await movieService.getMovies(page, limit) 
+        const movies = await movieService.getMovies(page, limit)     
         res.status(200).json(movies)
     }
 
