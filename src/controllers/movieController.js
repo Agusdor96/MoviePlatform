@@ -13,7 +13,7 @@ class MovieController {
     }
 
     async getFilteredMovies(req, res) {
-        const { page = 0, limit = 200, ...filters } = req.query;
+        const { page = 1, limit = 20, ...filters } = req.query;
 
         try {
             const movies = await movieService.getFilteredMovies(page, limit, filters);

@@ -11,8 +11,8 @@ class MovieService {
 
       const movies = await Movie.find()
         .sort({ 
-          year: -1,
-          imdbPosition: 1,
+          year: 1,
+          imdbPosition: -1,
           rating: -1,         
           duration: -1        
         }).skip(offset).limit(limit);
@@ -31,6 +31,7 @@ class MovieService {
     const offset = page * limit;
     const query = {};
 
+    
     if (filters.search) {
       const exactMatch = await Movie.find({ title: new RegExp(`^${filters.search}$`, 'i') });
       if (exactMatch.length > 0) {
@@ -63,19 +64,22 @@ class MovieService {
     }
 
     try {
+        const totalMovies = await Movie.countDocuments();
         const movies = await Movie.find(query)
             .sort(sortOptions)
             .skip(offset)
             .limit(limit);
-        return movies;
+        return {
+          movies,
+          totalMovies
+        }
     } catch (err) {
         console.error(err);
         throw err;
     }
   }
 
-  async createMovie(movie) {
-    
+  async createMovie(movie) { 
     try {
       const newMovie = await Movie.create(movie);
       return newMovie;
