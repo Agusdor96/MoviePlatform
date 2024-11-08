@@ -27,52 +27,104 @@ class MovieService {
     }
   }
 
+  // async getFilteredMovies(page, limit, filters) {
+  //   const offset = page * limit;
+  //   const query = {};
+
+    
+  //   if (filters.search) {
+  //     const exactMatch = await Movie.find({ title: new RegExp(`^${filters.search}$`, 'i') });
+  //     if (exactMatch.length > 0) {
+  //         return exactMatch;
+  //     } else {
+  //         query.title = new RegExp(filters.search, 'i');
+  //     }
+  //   }
+
+  //   if (filters.director) query.director = new RegExp(filters.director, 'i');
+  //   if (filters.mainCharacter) query.mainCharacter = new RegExp(filters.mainCharacter, 'i');
+  //   if (filters.year) query.year = Number(filters.year);
+  //   if (filters.genre) query.genre = new RegExp(filters.genre, 'i');
+  //   if (filters.imdbPosition) query.imdbPosition = Number(filters.imdbPosition);
+  //   if (filters.duration) query.duration = Number(filters.duration);
+  //   if (filters.rating) query.rating = Number(filters.rating);
+
+  //   const sortOptions = {};
+  //   const allowedSortFields = ['imdbPosition', 'rating', 'duration'];
+
+  //   if (filters.sortBy && filters.order) {
+  //     const orderField = filters.sortBy.trim();
+  //     const orderType = filters.order === 'asc' ? 1 : -1;
+
+  //     if (allowedSortFields.includes(orderField)) {
+  //         sortOptions[orderField] = orderType;
+  //     }
+  //   } else {
+  //     sortOptions.year = 1
+  //   }
+
+  //   try {
+  //       const totalMovies = await Movie.countDocuments();
+  //       const movies = await Movie.find(query)
+  //           .sort(sortOptions)
+  //           .skip(offset)
+  //           .limit(limit);
+  //       return {
+  //         movies,
+  //         totalMovies
+  //       }
+  //   } catch (err) {
+  //       console.error(err);
+  //       throw err;
+  //   }
+  // }
+
   async getFilteredMovies(page, limit, filters) {
     const offset = page * limit;
     const query = {};
 
-    
+    // Filtro de búsqueda principal
     if (filters.search) {
-      const exactMatch = await Movie.find({ title: new RegExp(`^${filters.search}$`, 'i') });
-      if (exactMatch.length > 0) {
-          return exactMatch;
-      } else {
-          query.title = new RegExp(filters.search, 'i');
-      }
+        const searchRegex = new RegExp(filters.search, 'i');
+        query.$or = [
+            { title: searchRegex },
+            { director: searchRegex },
+            { mainCharacter: searchRegex },
+            { genre: searchRegex }
+        ];
     }
 
-    if (filters.director) query.director = new RegExp(filters.director, 'i');
-    if (filters.mainCharacter) query.mainCharacter = new RegExp(filters.mainCharacter, 'i');
-    if (filters.year) query.year = Number(filters.year);
-    if (filters.genre) query.genre = new RegExp(filters.genre, 'i');
-    if (filters.imdbPosition) query.imdbPosition = Number(filters.imdbPosition);
-    if (filters.duration) query.duration = Number(filters.duration);
-    if (filters.rating) query.rating = Number(filters.rating);
-
+    // Filtros de ordenamiento
     const sortOptions = {};
-    const allowedSortFields = ['imdbPosition', 'rating', 'duration'];
+    const allowedSortFields = ['year', 'imdbPosition', 'rating', 'duration'];
 
     if (filters.sortBy && filters.order) {
-      const orderField = filters.sortBy.trim();
-      const orderType = filters.order === 'asc' ? 1 : -1;
+        const orderField = filters.sortBy.trim();
+        const orderType = filters.order === 'asc' ? 1 : -1;
 
-      if (allowedSortFields.includes(orderField)) {
-          sortOptions[orderField] = orderType;
-      }
+        if (allowedSortFields.includes(orderField)) {
+            sortOptions[orderField] = orderType;
+        }
     } else {
-      sortOptions.year = 1
+        // Orden predeterminado por año descendente si no se especifica otro orden
+        sortOptions.year = -1;
     }
 
     try {
-        const totalMovies = await Movie.countDocuments();
+        // Obtener total de películas que coinciden con la búsqueda principal
+        const totalMovies = await Movie.countDocuments(query);
+
+        // Obtener películas filtradas, ordenadas y paginadas
         const movies = await Movie.find(query)
             .sort(sortOptions)
             .skip(offset)
             .limit(limit);
+
+
         return {
-          movies,
-          totalMovies
-        }
+            movies,
+            totalMovies
+        };
     } catch (err) {
         console.error(err);
         throw err;
