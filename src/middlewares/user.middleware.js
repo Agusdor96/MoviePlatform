@@ -11,35 +11,29 @@ const movieService = new MovieService()
 
 
 class UserMiddleware {
-
     async validateUserSignUp(req, res, next){
         const { email, password} = req.body
-        try {
-            if(!email || !password) throw Exceptions.BadRequest("Missing fields")
 
-            const existingEmail = await userService.getUserByEmail({email})
-            if(existingEmail) throw Exceptions.Conflict("Email already Exists")
+        if(!email || !password) throw Exceptions.BadRequest("Los datos deben estar completos")
 
-            next()
-        } catch (error) {
-            next(error);  
-        }
+        const existingEmail = await userService.getUserByEmail({email})
+        if(existingEmail) throw Exceptions.Conflict("El email ya existe")
+
+        next()
     }
 
     async validateUserSignIn(req, res, next){
         const { email, password } = req.body
-        try {
-            const user = await userService.getUserByEmail({email});
-            if (!user) throw Exceptions.NotFound("Invalid Credentials")
-            
-            const isPasswordValid = await bcrypt.compare(password, user.password);
-            if (!isPasswordValid) throw Exceptions.BadRequest("Invalid Credentials")
 
-            res.locals.user = user
-            next()
-        } catch (error) {
-            next(error)
-        }
+        const user = await userService.getUserByEmail({email});
+        if (!user) throw Exceptions.NotFound("Invalid Credentials")
+        
+        const isPasswordValid = await bcrypt.compare(password, user.password);
+        if (!isPasswordValid) throw Exceptions.BadRequest("Invalid Credentials")
+
+        res.locals.user = user
+        next()
+
     }
 
     async validateUpdateWatchlist(req, res, next){

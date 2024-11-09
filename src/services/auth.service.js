@@ -14,13 +14,9 @@ class AuthService {
             password: hashPassword,
         };
 
-        try {
-            const createUser = await userService.createUser(user);
-            const { password, ...withoutPassword } = createUser.toObject();
-            return withoutPassword;
-        } catch (error) {
-            return Exceptions.InternalServerError("Error creating user")
-        }
+        const createUser = await userService.createUser(user);
+        const { password, ...withoutPassword } = createUser.toObject();
+        return withoutPassword;
     }
 
     async userLogIn(user, res){

@@ -8,15 +8,6 @@ const multerMidd = multer({
     fileFilter: fileValidator
 });
 
-// const multerUploadMiddleware = (fieldName) => (req, res, next) => {
-//   multerMidd.single(fieldName)(req, res, (err) => {
-//       if (err) {
-//           return multerErrorHandler(err, req, res, next);
-//       }
-//       next();
-//   });
-// };
-
 const multerErrorHandler = (err, req, res, next) => {
     if (err instanceof MulterError) {
       if (err.code === 'LIMIT_FILE_SIZE') {

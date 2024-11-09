@@ -4,8 +4,7 @@ const ScrapService = require("../services/scrap.service.js");
 const movieService = new MovieService()
 const scrapService = new ScrapService()
 
-class ScrapController {
-    
+class ScrapController {  
     async getScrapMovies (req, res){
         const existingMovies = await movieService.getMovies()
         if(existingMovies.length > 10) res.status(409).json({ mensaje: 'Las películas ya están en la base de datos' });
@@ -30,12 +29,8 @@ class ScrapController {
     }
 
     async getMovieUrls(req, res){
-        try {
-            await scrapService.scrapeMovies();
-            res.send('Scraping completado');
-        } catch (error) {
-            res.status(500).send('Error durante el scraping');
-        }
+        await scrapService.scrapeMovies();
+        res.send('Scraping completado');
     }
 }
 

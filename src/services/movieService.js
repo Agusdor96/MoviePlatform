@@ -6,24 +6,19 @@ class MovieService {
   async getMovies(page, limit) {
     const offset = page * limit
 
-    try {
-      const totalMovies = await Movie.countDocuments();
+    const totalMovies = await Movie.countDocuments();
 
-      const movies = await Movie.find()
-        .sort({ 
-          year: 1,
-          imdbPosition: -1,
-          rating: -1,         
-          duration: -1        
-        }).skip(offset).limit(limit);
+    const movies = await Movie.find()
+      .sort({ 
+        year: 1,
+        imdbPosition: -1,
+        rating: -1,         
+        duration: -1        
+      }).skip(offset).limit(limit);
 
-      return {
-        movies,
-        totalMovies
-      }
-    } catch (err) {
-      console.error(err);
-      throw err;
+    return {
+      movies,
+      totalMovies
     }
   }
 
@@ -109,36 +104,24 @@ class MovieService {
         // Orden predeterminado por año descendente si no se especifica otro orden
         sortOptions.year = -1;
     }
-
-    try {
         // Obtener total de películas que coinciden con la búsqueda principal
-        const totalMovies = await Movie.countDocuments(query);
+      const totalMovies = await Movie.countDocuments(query);
 
-        // Obtener películas filtradas, ordenadas y paginadas
-        const movies = await Movie.find(query)
-            .sort(sortOptions)
-            .skip(offset)
-            .limit(limit);
+      // Obtener películas filtradas, ordenadas y paginadas
+      const movies = await Movie.find(query)
+          .sort(sortOptions)
+          .skip(offset)
+          .limit(limit);
 
-
-        return {
-            movies,
-            totalMovies
-        };
-    } catch (err) {
-        console.error(err);
-        throw err;
-    }
+      return {
+          movies,
+          totalMovies
+      };
   }
 
   async createMovie(movie) { 
-    try {
       const newMovie = await Movie.create(movie);
       return newMovie;
-    } catch (err) {
-      console.error(err);
-      throw err;
-    }
   }
 
   async updateMovie(data){
@@ -157,17 +140,15 @@ class MovieService {
     }
 
   async deleteMovie(id) {
-    try {
       const deletedMovie = await Movie.findOneAndDelete({ _id: id });
       return deletedMovie;
-    } catch (err) {
-      console.error(err);
-      throw err;
-    }
   }
 
   async getMovieById(data) {
-    return await Movie.findOne( data );
+    const movie = await Movie.findOne( data );
+
+    if(!movie || !movie.platformLink) throw Exceptions.Conflict("Error al obtener link de cineb.rs") 
+    return movie
   }
 
   async insertMoviesIntoMongo(moviesData){

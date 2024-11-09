@@ -15,58 +15,36 @@ class MovieController {
     async getFilteredMovies(req, res) {
         const { page = 1, limit = 20, ...filters } = req.query;
 
-        try {
-            const movies = await movieService.getFilteredMovies(page, limit, filters);
-            res.status(200).json(movies);
-        } catch (err) {
-            console.error(err);
-            res.status(500).json({ message: 'Error al obtener las películas con filtros' });
-        }
+        const movies = await movieService.getFilteredMovies(page, limit, filters);
+        res.status(200).json(movies);
     }
 
     async getMovieById(req, res){
         const {movieId}  = req.params
-        try{
+ 
         const movie = await movieService.getMovieById({ _id: movieId })
-            if(!movie || !movie.platformLink){
-                res.status(404).json({ message: "Error al obtener link de cineb.rs"}) 
-            }
-            res.redirect(movie.platformLink);
-        } catch(err){
-            next(err);
-        }
+        res.redirect(movie.platformLink);
     }
 
     async addMovie(req, res){
         const {data} = res.locals
-        try{
-            const newMovie = await movieService.createMovie(data);
-            res.status(201).json(newMovie)
-        } catch (err){
-            res.status(err.code).json({err});
-        }
-        
+
+        const newMovie = await movieService.createMovie(data);
+        res.status(201).json(newMovie) 
     }
 
     async updateMovie(req, res){
         const {data} = res.locals
 
-        try{
-            const response = await movieService.updateMovie(data)
-            res.status(201).json(response)
-        } catch (err){
-            res.status(500).json({err:"error en controlador de actualizacion de la pelicula"});
-        }
+        const response = await movieService.updateMovie(data)
+        res.status(201).json(response)
     }
 
     async deleteMovie(req, res){
         const { id } = req.params; 
-        try{
-            const deletedMovie = await movieService.deleteMovie(id);
-            res.status(200).json(deletedMovie)
-        }catch (err) {
-            res.status(409).json({ message: 'Error al eliminar la pelicula' });
-        }
+
+        const deletedMovie = await movieService.deleteMovie(id);
+        res.status(200).json(deletedMovie)
     }
 
     async insertMovieData(req, res){

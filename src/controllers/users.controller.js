@@ -3,65 +3,46 @@ const UserService = require("../services/users.service")
 const userService = new UserService()
 
 class UserController{
-    async getAllUsers(req, res, next){
-        try{
-            const users = await userService.getAllUsers()
-            res.status(200).json({users})
-        }catch(error){
-            next(error)
-        }
+    async getAllUsers(req, res){
+        const users = await userService.getAllUsers()
+        res.status(200).json({users})
     }
 
-    async getUserById(req, res, next){
+    async getUserById(req, res){
         const {id} = req.params
-        try{
-            const user = await userService.getUserById({_id: id})
-            res.status(200).json(user)
-        }catch(error){
-            next(error)
-        }
+        
+        const user = await userService.getUserById({_id: id})
+        res.status(200).json(user)
     }
 
-    async getUserWatchlist(req, res, next){
+    async getUserWatchlist(req, res){
         const {userId} = req.params
         const {page = 0, limit = 15} = req.query
-        try{
-            const movies = await userService.getWatchlist(userId, page, limit)
-            res.status(200).json({movies})
-        }catch (error){
-            next(error)
-        }
+
+        const movies = await userService.getWatchlist(userId, page, limit)
+        res.status(200).json({movies})
     }
 
-    async getUserWatchedMovies(req, res, next){
+    async getUserWatchedMovies(req, res){
         const {userId} = req.params
         const {page = 0, limit = 15} = req.query
-        try{
-            const movies = await userService.getWatchedMovies(userId, page, limit)
-            res.status(200).json({movies})
-        }catch (error){
-            next(error)
-        }
+
+        const movies = await userService.getWatchedMovies(userId, page, limit)
+        res.status(200).json({movies})
     }
 
-    async updateWatchlist(req, res, next){
+    async updateWatchlist(req, res){
         const {...data} = req.body
-        try{
-            const response = await userService.updateWatchlist(data)
-            res.status(200).json({message: response})
-        }catch(error){
-            next(error)
-        }
+
+        const response = await userService.updateWatchlist(data)
+        res.status(200).json({message: response})
     }
 
-    async updateWatchedMovies(req, res, next){
+    async updateWatchedMovies(req, res){
         const {...data} = req.body
-        try{
-            const response = await userService.updateWatchedMovies(data)
-            res.status(200).json({message: response})
-        }catch(error){
-            next(error)
-        }
+
+        const response = await userService.updateWatchedMovies(data)
+        res.status(200).json({message: response})
     }
 }
 

@@ -26,13 +26,8 @@ class MovieMiddleware{
         }
 
         if(req.file){
-            try{
-                const imagePath = await processImage(req.file)
-                res.locals.data.posterUrl = imagePath
-
-            } catch (err){
-                return next(Exceptions.BadRequest("Error al procesar la imagen: " + err.message));
-            }
+            const imagePath = await processImage(req.file)
+            res.locals.data.posterUrl = imagePath
         }
         next() 
     }
@@ -46,38 +41,31 @@ class MovieMiddleware{
 
         const checkMovie = await movieService.getMovieById({ _id: id })
         if (!checkMovie) {
-            return next(Exceptions.Conflict("No se encontro pelicula con ese id."));
+            return next(Exceptions.NotFound("No se encontro pelicula con ese id."));
         }
 
-        try{
-            const validFields = [
-                "title", "director", "mainCharacter", "year",
-                "genre", "imdbPosition", "awards", "duration",
-                "rating", "posterUrl"
-            ];
+        const validFields = [
+            "title", "director", "mainCharacter", "year",
+            "genre", "imdbPosition", "awards", "duration",
+            "rating", "posterUrl"
+        ];
 
-            const filteredData = {};
+        const filteredData = {};
 
-            validFields.forEach(field => {
-                if (movieData[field] && movieData[field].trim() !== '') { 
-                    filteredData[field] = movieData[field].trim(); 
-                }
-            });
-            res.locals.data = { id, filteredData };
-
-            if(req.file){
-                try{
-                    const imagePath = await processImage(req.file)
-                    res.locals.data.posterUrl = imagePath;
-
-                } catch (err){
-                    return next(Exceptions.BadRequest("Error al procesar la imagen: " + err.message));
-                }
+        validFields.forEach(field => {
+            if (movieData[field] && movieData[field].trim() !== '') { 
+                filteredData[field] = movieData[field].trim(); 
             }
-            next() 
-        }catch(err){
-            return next(Exceptions.InternalServerError("Error en la validación de actualización de película"));
+        });
+        res.locals.data = { id, filteredData };
+
+        if(req.file){
+            const imagePath = await processImage(req.file)
+            res.locals.data.posterUrl = imagePath;
+
+            return next(Exceptions.BadRequest("Error al procesar la imagen: " + err.message));
         }
+        next() 
     }
 
     async validateDeleteMovieData(req, res, next){
@@ -86,7 +74,7 @@ class MovieMiddleware{
         
         const checkMovie = await movieService.getMovieById({ _id: id })
         if (!checkMovie) {
-            return next(Exceptions.Conflict("No se encontro pelicula con ese id."));
+            return next(Exceptions.NotFound("No se encontro pelicula con ese id."));
         }
 
         if(checkMovie.posterUrl){

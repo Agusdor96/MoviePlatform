@@ -4,7 +4,6 @@ const { auth, spreadsheetId } = require ("../config/googleSheetCon.js")
 const Movie = require("../models/Movie")
 
 class ScrapService{
-
     ///////////////////////////// Scrapping el top 250 de imdbn ///////////////////////////////////////////
     async scrapTop250Imdb () {
         const browser = await puppeteer.launch();
@@ -42,7 +41,7 @@ class ScrapService{
           await browser.close();
         }
     }
-
+    
     async saveScrapedMovies(movies) {
         try {
           const scrapedMovies = await Movie.insertMany(movies);
