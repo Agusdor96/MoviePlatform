@@ -18,16 +18,14 @@ class MovieMiddleware{
         if (checkMovie) {
             return next(Exceptions.Conflict("Ya existe una película con el mismo título y director."));
         }
+        
+        const imagePath = await processImage(req.file)
 
         res.locals.data = {
             ...movieData,
             imdbPosition: imdbPosition ?? null,
             awards: awards ?? "-",
-        }
-
-        if(req.file){
-            const imagePath = await processImage(req.file)
-            res.locals.data.posterUrl = imagePath
+            posterUrl: imagePath
         }
         next() 
     }
