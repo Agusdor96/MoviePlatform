@@ -8,7 +8,7 @@ const cookieParser = require('cookie-parser');
 
 const app = express();
 app.use(morgan("dev"));
-app.use(cors({ origin: 'https://movie-platform-front.vercel.app' }));
+app.use(cors({ origin: '*' }));
 app.use(express.json()); 
 app.use(cookieParser());
 app.use(indexRouter);
