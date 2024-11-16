@@ -1,14 +1,15 @@
 const dbCon = require("./config/dbCon");
 const app = require ("./server");
 
-dbCon().then(() => {
-    const port = process.env.PORT || 3000; // Usar el puerto correcto en producción
-    app.listen(port, () => {
-       console.log(`Server is running on port ${port}`);
-    });
- }).catch((err) => {
-    console.error("Error al conectar con la base de datos:", err);
-    process.exit(1); // Salir si la conexión falla
- });
+module.exports = async (req, res) => {
+    try {
+      await dbCon();  // Conectar a la base de datos
+      app(req, res);  // Llamar a Express para manejar la solicitud
+    } catch (err) {
+      console.error("Error al conectar con la base de datos:", err);
+      res.status(500).send("Error en el servidor");
+    }
+  };
+  
 
 
