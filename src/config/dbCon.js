@@ -7,6 +7,8 @@ const dbCon = async () => {
       return;
    }
    try {
+      console.log("Intentando conectar a MongoDB...");
+
       await mongoose.connect(process.env.MONGO_URI, {
          autoIndex: true,  // Esto es válido
       });
