@@ -2,6 +2,10 @@ require("dotenv").config();
 const mongoose  = require("mongoose");
 
 const dbCon = async () => {
+   if (mongoose.connection.readyState >= 1) {
+      // Si ya está conectado, no hacer nada
+      return;
+   }
    try {
       await mongoose.connect(process.env.MONGO_URI, {
          autoIndex: true,  // Esto es válido
